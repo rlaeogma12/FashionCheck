@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1"
+    android:background="@color/color_WHITE">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_UserInfoIcon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:onClick="onClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/user" />
+
+            <TextView
+                android:id="@+id/userid"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/btn_UserInfoIcon"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="User ID"
+                android:textSize="24sp" />
+
+            <ImageButton
+                android:id="@+id/btn_option"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:onClick="onClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu"
+                android:textColor="@color/color_WHITE" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="6"
+            android:layout_height="0dp"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/user_image"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="270dp"
+                    android:maxWidth="405dp"
+                    android:src="@color/color_black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/userImageText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="프로필 사진"
+            android:textSize="24sp" />
+
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_ScoreList"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/notes" />
+
+            <ImageButton
+                android:id="@+id/btn_UploadPicture"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/camera" />
+
+            <ImageButton
+                android:id="@+id/btn_checkfashion"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/checked" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

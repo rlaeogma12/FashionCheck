@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1"
+    android:background="@color/color_WHITE">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="사진 분석 결과"
+            android:textColor="@color/color_black"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:orientation="horizontal"
+            android:layout_height="0dp">
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/Profile_Image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="6"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="200dp"
+                    android:maxWidth="300dp"
+                    android:onClick="onClick"
+                    android:src="@color/color_black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textSize="20sp"
+                    android:text="사용자 사진" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:orientation="horizontal"
+            android:layout_height="0dp">
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"/>
+            <LinearLayout
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/TOT_Image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="6"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="200dp"
+                    android:maxWidth="300dp"
+                    android:src="@color/color_black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textSize="20sp"
+                    android:text="톤온톤 결과" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/TIT_Image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="6"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="200dp"
+                    android:maxWidth="300dp"
+                    android:src="@color/color_black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textSize="20sp"
+                    android:text="톤인톤 결과" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/btn_Share"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/social" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:gravity="center_horizontal"
+                    android:text="총 점수는 ___ 입니다!"
+                    android:textColor="@color/color_black"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/btn_Return"
+                    android:layout_width="200dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:background="@color/color_button"
+                    android:text="돌아가기"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>
