@@ -1,8 +1,11 @@
 package qol.fashionchecker;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +16,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -44,6 +49,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wooplr.spotlight.prefs.PreferencesManager;
+import com.wooplr.spotlight.utils.SpotlightSequence;
+
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -57,21 +65,35 @@ public class MainActivity extends AppCompatActivity{
     private static final int REQUEST_TAKE_ALBUM = 3;
     private static final int REQUEST_IMAGE_CROP = 4;
 
+    //Help
+    private static final String INTRO_CARD = "fab_intro";
+    private static final String INTRO_SWITCH = "switch_intro";
+    private static final String INTRO_RESET = "reset_intro";
+    private static final String INTRO_REPEAT = "repeat_intro";
+    private static final String INTRO_CHANGE_POSITION = "change_position_intro";
+    private static final String INTRO_SEQUENCE = "sequence_intro";
+
     static{
         System.loadLibrary("native-lib");
         System.loadLibrary("opencv_java3");
     }
 
-    String TAG = "openCV";
-
     ImageView iv_view;
-    ImageView outputView;
     String mCurrentPhotoPath;
     TextView user_id;
     Uri imageUri;
     Uri photoURI, albumURI;
     String resultPath;
 
+    //Progress Handler / Dialog
+    private Handler mHandler;
+    private ProgressDialog mProgressDialog;
+
+    ImageButton btn_upload;
+    ImageButton btn_checkfashion;
+    ImageButton id_select;
+    ImageButton menu_select;
+    ImageButton list_select;
 
     //Create the App.
     @Override
@@ -87,11 +109,13 @@ public class MainActivity extends AppCompatActivity{
         iv_view = (ImageView) this.findViewById(R.id.user_image);
         user_id = this.findViewById(R.id.userid);
 
-        ImageButton btn_upload = this.findViewById(R.id.btn_UploadPicture);
-        ImageButton btn_checkfashion = this.findViewById(R.id.btn_checkfashion);
-        ImageButton id_select = this.findViewById(R.id.btn_UserInfoIcon);
-        ImageButton menu_select = this.findViewById(R.id.btn_option);
-        ImageButton list_select = this.findViewById(R.id.btn_ScoreList);
+
+
+        btn_upload = this.findViewById(R.id.btn_UploadPicture);
+        btn_checkfashion = this.findViewById(R.id.btn_checkfashion);
+        id_select = this.findViewById(R.id.btn_UserInfoIcon);
+        menu_select = this.findViewById(R.id.btn_option);
+        list_select = this.findViewById(R.id.btn_ScoreList);
 
         //ID Setting Alert Pop Up
         id_select.setOnClickListener(new View.OnClickListener(){
@@ -105,6 +129,7 @@ public class MainActivity extends AppCompatActivity{
         menu_select.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                pulseAnimation();
                 //팝업 메뉴 객체 만듬
                 PopupMenu popup = new PopupMenu(getApplicationContext(), v);
                 //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
@@ -125,7 +150,7 @@ public class MainActivity extends AppCompatActivity{
                                 break;
 
                             case R.id.popup_help:
-                                showHelpMenu();
+                                helpHighlight();
                                 break;
 
                             case R.id.popup_exit:
@@ -142,7 +167,7 @@ public class MainActivity extends AppCompatActivity{
         list_select.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                pulseAnimation();
             }
         });
 
@@ -156,6 +181,27 @@ public class MainActivity extends AppCompatActivity{
 
                     intent.setAction("android.intent.action.RESULT");
                     intent.putExtra("imgPath", resultPath);
+
+                    mHandler = new Handler();
+                    mProgressDialog = ProgressDialog.show(MainActivity.this,"",
+                            "사진을 분석중입니다..",true);
+                    mHandler.postDelayed( new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            try
+                            {
+                                if (mProgressDialog!=null&&mProgressDialog.isShowing()){
+                                    mProgressDialog.dismiss();
+                                }
+                            }
+                            catch ( Exception e )
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 3000);
 
                     startActivity(intent); // 다음 화면으로 넘어간다
                 }
@@ -202,6 +248,38 @@ public class MainActivity extends AppCompatActivity{
         });
 
         checkPermission();
+
+        helpHighlight();
+    }
+
+    //Button Animation
+    ObjectAnimator objAnim;
+    private void pulseAnimation(){
+        objAnim= ObjectAnimator.ofPropertyValuesHolder(list_select,
+                PropertyValuesHolder.ofFloat("scaleX", 1.5f),
+                PropertyValuesHolder.ofFloat("scaleY", 1.5f));
+        objAnim.setDuration(300);
+        objAnim.setRepeatCount(ObjectAnimator.RESTART);
+        objAnim.setRepeatMode(ObjectAnimator.REVERSE);
+        objAnim.start();
+    }
+
+    void helpHighlight(){
+        PreferencesManager mPreferencesManager = new PreferencesManager(MainActivity.this);
+        mPreferencesManager.resetAll();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SpotlightSequence.getInstance(MainActivity.this,null)
+                        .addSpotlight(id_select, "User Name", "이곳에 당신의 아이디가 나타납니다.", INTRO_SWITCH)
+                        .addSpotlight(menu_select, "Menu", "이곳을 클릭하여 메뉴를 확인하세요.", INTRO_RESET)
+                        .addSpotlight(iv_view, "Profile Image", "이곳에는 프로필 이미지가 나타납니다.", INTRO_REPEAT)
+                        .addSpotlight(list_select, "List", "이곳에는 현재까지의 패션 점수 목록이 나타납니다.", INTRO_CHANGE_POSITION)
+                        .addSpotlight(btn_upload, "Image Upload", "이곳을 눌러 이미지를 업로드하세요.", INTRO_SEQUENCE)
+                        .addSpotlight(btn_checkfashion,"Check", "프로필 사진을 올렸나요?\n" + "분석을 시작합시다!", INTRO_CARD)
+                        .startSequence();
+            }
+        },400);
     }
 
     void showSetID()    {
@@ -456,4 +534,6 @@ public class MainActivity extends AppCompatActivity{
                 break;
         }
     }
+
+
 }

@@ -21,11 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <meta-data
                 android:name=".MainActivity"
@@ -35,9 +30,26 @@
         <activity android:name=".ResultActivity">
             <intent-filter>
                 <action android:name="android.intent.action.RESULT" />
+            </intent-filter>
+        </activity>
 
+        <activity android:name=".ColorHelpActivity" android:theme="@android:style/Theme.Dialog" />
+
+        <!-- login main Activity -->
+        <activity android:name=".LoginActivity" />
+        <!-- start main Activity -->
+        <activity android:name=".WelcomeActivity" />
+        <!-- Splash Activity -->
+        <activity
+            android:name=".LogoActivity"
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <provider

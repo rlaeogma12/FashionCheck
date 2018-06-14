@@ -13,38 +13,26 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/btn_UserInfoIcon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:onClick="onClick"
-                android:scaleType="centerInside"
-                android:src="@drawable/user" />
+            android:layout_weight="1"
+            android:layout_margin="8dp">
 
             <TextView
-                android:id="@+id/userid"
-                android:layout_width="100dp"
-                android:layout_height="60dp"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/btn_UserInfoIcon"
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="User ID"
-                android:textSize="24sp" />
+                android:text="Fashion checker"
+                android:textStyle="bold"
+                android:fontFamily="@font/billabong"
+                android:textSize="23sp" />
 
             <ImageButton
                 android:id="@+id/btn_option"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
@@ -56,9 +44,45 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_weight="6"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="top"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_UserInfoIcon"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/user" />
+
+            <TextView
+                android:id="@+id/userid"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/btn_UserInfoIcon"
+                android:fontFamily="@font/cabin_regular"
+                android:gravity="center_vertical"
+                android:text="User ID"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="11"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal" >
 
             <LinearLayout
@@ -75,15 +99,25 @@
 
                 <ImageView
                     android:id="@+id/user_image"
-                    android:layout_weight="1"
+                    android:layout_weight="11"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
                     android:maxHeight="270dp"
                     android:maxWidth="405dp"
-                    android:src="@color/color_black" />
+                    android:src="@drawable/fashionlogo" />
 
+                <TextView
+                    android:id="@+id/userImageText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="Your Profile"
+                    android:fontFamily="@font/cabin_regular"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -93,29 +127,18 @@
 
         </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/userImageText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="프로필 사진"
-            android:textSize="24sp" />
-
-
         <RelativeLayout
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="bottom"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
+            android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btn_ScoreList"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
@@ -124,8 +147,8 @@
 
             <ImageButton
                 android:id="@+id/btn_UploadPicture"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
@@ -134,8 +157,8 @@
 
             <ImageButton
                 android:id="@+id/btn_checkfashion"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"
                 android:scaleType="centerInside"

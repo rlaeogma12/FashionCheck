@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,7 +25,8 @@ import static org.opencv.imgproc.Imgproc.COLOR_BGR2RGB;
 import static org.opencv.imgproc.Imgproc.cvtColor;
 
 public class ResultActivity extends AppCompatActivity {
-    private ImageView iv_ProfilePhoto, iv_TOTPhoto, iv_TITPhoto;
+    private ImageView iv_ProfilePhoto;
+    private Mat img_input, img_output1, img_output2;
 
     static{
         System.loadLibrary("native-lib");
@@ -40,8 +42,6 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.final_result);  // layout xml 과 자바파일을 연결
 
         iv_ProfilePhoto = this.findViewById(R.id.Profile_Image);
-        iv_TOTPhoto = this.findViewById(R.id.TOT_Image);
-        iv_TITPhoto = this.findViewById(R.id.TIT_Image);
 
         //Intent 받아오기
         Intent intent = getIntent();
@@ -59,7 +59,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
-        Button btn_return = (Button) this.findViewById(R.id.btn_Return);
+        ImageButton btn_return = this.findViewById(R.id.btn_Return);
         btn_return.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -67,8 +67,21 @@ public class ResultActivity extends AppCompatActivity {
                         getApplicationContext(), // 현재 화면의 제어권자
                         MainActivity.class); // 다음 넘어갈 클래스 지정
                 startActivity(intent); // 다음 화면으로 넘어간다
-            };
+            }
         });
+
+        /*
+        ImageButton btn_colorHelp = this.findViewById(R.id.btn_colorHelp);
+        btn_colorHelp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(getApplicationContext(), ColorHelpActivity.class);
+                intent.putExtra("data", "Test Popup");
+                startActivityForResult(intent, 1);
+            }
+        });
+        */
+
     } // end onCreate()
 
     private void copyFile(String filename) {
@@ -106,20 +119,19 @@ public class ResultActivity extends AppCompatActivity {
         cascadeClassifier_face = loadCascade( "haarcascade_frontalface_alt.xml");
     }
 
-    private Mat img_input, img_output1, img_output2;
+
 
     private void imageprocess_and_showResult() {
 
         checkFashion(cascadeClassifier_face, img_input.getNativeObjAddr(), img_output1.getNativeObjAddr(), img_output2.getNativeObjAddr());
 
         cvtColor(img_input, img_input, COLOR_BGR2RGB);
-        cvtColor(img_output1, img_output1, COLOR_BGR2RGB);
-        cvtColor(img_output2, img_output2, COLOR_BGR2RGB);
 
         Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(img_input, bitmapInput);
         iv_ProfilePhoto.setImageBitmap(bitmapInput);
 
+        /*
         Bitmap bitmapOutput1 = Bitmap.createBitmap(img_output1.cols(), img_output1.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(img_output1, bitmapOutput1);
         iv_TOTPhoto.setImageBitmap(bitmapOutput1);
@@ -127,6 +139,7 @@ public class ResultActivity extends AppCompatActivity {
         Bitmap bitmapOutput2 = Bitmap.createBitmap(img_output2.cols(), img_output2.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(img_output2, bitmapOutput2);
         iv_TITPhoto.setImageBitmap(bitmapOutput2);
+        */
     }
 
     public void checkProcessing(String filePath){

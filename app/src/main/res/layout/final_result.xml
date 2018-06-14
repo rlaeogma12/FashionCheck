@@ -12,40 +12,46 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="사진 분석 결과"
-            android:textColor="@color/color_black"
-            android:textSize="20sp" />
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Fashion checker"
+                android:textStyle="bold"
+                android:fontFamily="@font/billabong"
+                android:textSize="23sp" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_weight="4"
             android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
             android:layout_height="0dp">
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/Profile_Image"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="6"
+                    android:layout_weight="7"
                     android:adjustViewBounds="true"
                     android:maxHeight="200dp"
                     android:maxWidth="300dp"
-                    android:onClick="onClick"
                     android:src="@color/color_black" />
 
                 <TextView
@@ -53,84 +59,255 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical|center_horizontal"
-                    android:textSize="20sp"
-                    android:text="사용자 사진" />
+                    android:textSize="18sp"
+                    android:fontFamily="@font/cabin_regular"
+                    android:text="Profile" />
             </LinearLayout>
             <LinearLayout
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent" />
+                android:layout_marginRight="20dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:fontFamily="@font/cabin_regular"
+                        android:textSize="18sp"
+                        android:text="색 배합" />
+
+                    <ProgressBar
+                        android:id="@+id/progress1"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:progressDrawable="@drawable/custom_progress"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="15dp"
+                        android:progress="50"
+                        android:layout_weight="3"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:fontFamily="@font/cabin_regular"
+                        android:textSize="18sp"
+                        android:text="난잡도" />
+
+                    <ProgressBar
+                        android:id="@+id/progress2"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:progressDrawable="@drawable/custom_progress"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="15dp"
+                        android:progress="50"
+                        android:layout_weight="3"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:fontFamily="@font/cabin_regular"
+                        android:textSize="18sp"
+                        android:text="TPO" />
+
+                    <TextView
+                        android:id="@+id/txt_tpo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/cabin_regular"
+                        android:gravity="center_vertical"
+                        android:text="_____룩"
+                        android:textSize="18sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:id="@+id/txt_score"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/cabin_regular"
+                        android:gravity="right"
+                        android:text="당신의 패션점수는 \n__점 입니다."
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
          </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="4"
-            android:orientation="horizontal"
-            android:layout_height="0dp">
+            android:layout_weight="6"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:layout_height="0dp" >
+
             <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"/>
-            <LinearLayout
-                android:layout_weight="4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/shirt"/>
                 <ImageView
-                    android:id="@+id/TOT_Image"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:id="@+id/prefer_shirt"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
                     android:layout_weight="6"
                     android:adjustViewBounds="true"
-                    android:maxHeight="200dp"
-                    android:maxWidth="300dp"
                     android:src="@color/color_black" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textSize="20sp"
-                    android:text="톤온톤 결과" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"/>
 
             <LinearLayout
-                android:layout_weight="4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="end"
+                android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/more_cloth"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/more"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/pants"/>
                 <ImageView
-                    android:id="@+id/TIT_Image"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:id="@+id/prefer_pants"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
                     android:layout_weight="6"
                     android:adjustViewBounds="true"
-                    android:maxHeight="200dp"
-                    android:maxWidth="300dp"
                     android:src="@color/color_black" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textSize="20sp"
-                    android:text="톤인톤 결과" />
             </LinearLayout>
+
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="end"
+                android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/more_pants"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/more"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/briefcase"/>
+                <ImageView
+                    android:id="@+id/prefer_briefcase"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="6"
+                    android:adjustViewBounds="true"
+                    android:src="@color/color_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"/>
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/clean"/>
+                <ImageView
+                    android:id="@+id/prefer_clean"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="6"
+                    android:adjustViewBounds="true"
+                    android:src="@color/color_black" />
+            </LinearLayout>
+
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -140,49 +317,28 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <ImageButton
+                android:id="@+id/btn_Return"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/backtitle"/>
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
-                <ImageButton
-                    android:id="@+id/btn_Share"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/social" />
-            </LinearLayout>
-
-            <LinearLayout
+                android:layout_weight="8"/>
+            <ImageButton
+                android:id="@+id/btn_Share"
+                android:contentDescription="@string/help"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="0dp"
-                    android:gravity="center_horizontal"
-                    android:text="총 점수는 ___ 입니다!"
-                    android:textColor="@color/color_black"
-                    android:textSize="20sp" />
-
-                <Button
-                    android:id="@+id/btn_Return"
-                    android:layout_width="200dp"
-                    android:layout_weight="1"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:background="@color/color_button"
-                    android:text="돌아가기"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/social" />
         </LinearLayout>
-
-
     </LinearLayout>
 </LinearLayout>

@@ -45,4 +45,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':openCVLibrary341')
+    implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
+    implementation 'com.github.wooplr:Spotlight:1.2.3'
 }

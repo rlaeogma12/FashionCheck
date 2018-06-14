@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">패션감지기</string>
+    <string name="help">도움말</string>
 </resources>
