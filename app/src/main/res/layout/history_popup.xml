@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="Notice"
+            android:text="Fashion History"
             android:textSize="20sp"
             android:textColor="#fff"
             android:gravity="center"
@@ -29,15 +29,50 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/txtText"
+            android:id="@+id/List1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="3dp"
             android:alpha="0.87"
             android:gravity="center"
-            android:text="Test Dialog"
+            android:text="Fashion List"
             android:textColor="#000"
             android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/List2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="3dp"
+            android:alpha="0.87"
+            android:gravity="center"
+            android:text="Fashion List"
+            android:textColor="#000"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/List3"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="3dp"
+            android:alpha="0.87"
+            android:gravity="center"
+            android:text="Fashion List"
+            android:textColor="#000"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/List4"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="3dp"
+            android:alpha="0.87"
+            android:gravity="center"
+            android:text="Fashion List"
+            android:textColor="#000"
+            android:textSize="15sp" />
+
+
     </LinearLayout>
     <!-- Notice -->
 

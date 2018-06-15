@@ -5,13 +5,19 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.roger.catloadinglibrary.CatLoadingView;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -25,8 +31,11 @@ import static org.opencv.imgproc.Imgproc.COLOR_BGR2RGB;
 import static org.opencv.imgproc.Imgproc.cvtColor;
 
 public class ResultActivity extends AppCompatActivity {
-    private ImageView iv_ProfilePhoto;
-    private Mat img_input, img_output1, img_output2;
+    //Mat & imageView
+    private ImageView iv_ProfilePhoto, iv_preferCloth, iv_preferPants, iv_preferBriefcase, iv_preferAccessary;
+    private Mat img_input;
+    private Mat[] img_output;
+    private int matNumber;
 
     static{
         System.loadLibrary("native-lib");
@@ -36,22 +45,51 @@ public class ResultActivity extends AppCompatActivity {
     private static final String TAG = "opencv";
     public long cascadeClassifier_face = 0;
 
+    //Btn List
+    ImageButton btn_return, btn_share;
+
+    //target image file path
+    String filePath;
+
+    //Use Thread-Handler for handling huge data process.
+    private Handler handler;
+    CatLoadingView mView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.final_result);  // layout xml 과 자바파일을 연결
+        setContentView(R.layout.final_result);  // connection of layout xml & Java File.
 
+        //Set Mat Default
+        matNumber = 6;
+        img_output = new Mat[matNumber];
+
+        // Connect View to value.
         iv_ProfilePhoto = this.findViewById(R.id.Profile_Image);
+        iv_preferCloth = this.findViewById(R.id.prefer_shirt);
+        iv_preferPants = this.findViewById(R.id.prefer_pants);
+        iv_preferBriefcase = this.findViewById(R.id.prefer_briefcase);
+        iv_preferAccessary = this.findViewById(R.id.prefer_clean);
+
+        //Handler allocation.
+        handler = new Handler();
 
         //Intent 받아오기
         Intent intent = getIntent();
         if(intent.getAction().equals("android.intent.action.RESULT")){
-            String filePath = intent.getStringExtra("imgPath");
+            filePath = intent.getStringExtra("imgPath");
             Log.d("File : ", filePath);
             File imgFile = new File(filePath);
             if(imgFile.exists()){
                 Log.d(TAG, "성공적으로 파일 불러오기 성공");
-                checkProcessing(filePath);
+
+                //Too heavy work.. Set Loading.
+                mView = new CatLoadingView();
+                mView.setCanceledOnTouchOutside(false);
+                mView.show(getSupportFragmentManager(), "");
+
+                Thread thread = new Thread(null, getMatData); //스레드 생성후 스레드에서 작업할 함수 지정(get)
+                thread.start();
             }
             else{
                 Log.d("Cannot found filePath:", filePath);
@@ -59,34 +97,119 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
-        ImageButton btn_return = this.findViewById(R.id.btn_Return);
+        btn_return = this.findViewById(R.id.btn_Return);
         btn_return.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(ResultActivity.this, R.anim.pulse);
+                btn_return.startAnimation(hyperspaceJumpAnimation);
                 Intent intent = new Intent(
                         getApplicationContext(), // 현재 화면의 제어권자
-                        MainActivity.class); // 다음 넘어갈 클래스 지정
+                        WelcomeActivity.class); // 다음 넘어갈 클래스 지정
                 startActivity(intent); // 다음 화면으로 넘어간다
             }
         });
 
-        /*
-        ImageButton btn_colorHelp = this.findViewById(R.id.btn_colorHelp);
-        btn_colorHelp.setOnClickListener(new View.OnClickListener(){
+        btn_share = this.findViewById(R.id.btn_Share);
+        btn_share.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), ColorHelpActivity.class);
-                intent.putExtra("data", "Test Popup");
-                startActivityForResult(intent, 1);
+                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(ResultActivity.this, R.anim.pulse);
+                btn_share.startAnimation(hyperspaceJumpAnimation);
+
+                Intent msg = new Intent(Intent.ACTION_SEND);
+                msg.addCategory(Intent.CATEGORY_DEFAULT);
+                msg.putExtra(Intent.EXTRA_SUBJECT, "주제");
+                msg.putExtra(Intent.EXTRA_TEXT, "내용");
+                msg.putExtra(Intent.EXTRA_TITLE, "제목");
+                msg.setType("text/plain");
+                startActivity(Intent.createChooser(msg, "내 점수 공유하기"));
             }
         });
-        */
 
     } // end onCreate()
 
-    private void copyFile(String filename) {
+    //For Thread, get Mat data from C++ opencv native.
+    private Runnable getMatData = new Runnable(){
+        public void run(){
+            try{
+                //Heavy Data process Here.
+                getMatDataFromNativeCpp();
+
+                //End of Process. send message to handler.
+                handler.post(updateResults);
+
+            } catch (Exception e){
+                Log.e("Thread getMatData Err: ", e.toString());
+            }
+        }
+    };
+
+    //Handler. notify END to Main Thread
+    private Runnable updateResults = new Runnable(){
+      public void run(){
+          //Set Mat to ImageView
+          setMatImageToView();
+
+          //End of Loading.
+          mView.onDismiss(mView.getDialog());
+      }
+    };
+
+    private void setMatImageToView(){
+        //Change BRR -> RGB (C++ : BGR , Java : RGB)
+        cvtColor(img_input, img_input, COLOR_BGR2RGB);
+        for(int i=0; i<matNumber; i++){
+            cvtColor(img_output[i], img_output[i], COLOR_BGR2RGB);
+        }
+
+        Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(img_input, bitmapInput);
+        iv_ProfilePhoto.setImageBitmap(bitmapInput);
+
+        Bitmap[] bitmapOutput = new Bitmap[matNumber];
+
+        for(int i=0; i<matNumber; i++){
+            bitmapOutput[i] = Bitmap.createBitmap(img_output[i].cols(), img_output[i].rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(img_output[i], bitmapOutput[i]);
+        }
+
+        iv_preferCloth.setImageBitmap(bitmapOutput[0]);
+        iv_preferPants.setImageBitmap(bitmapOutput[1]);
+        iv_preferBriefcase.setImageBitmap(bitmapOutput[2]);
+        iv_preferAccessary.setImageBitmap(bitmapOutput[3]);
+        /*
+        2 more available.
+         */
+    }
+
+    private void getMatDataFromNativeCpp(){
+        initMat();
+        //set default profile data.
+        if(filePath != null){
+            loadImage(filePath, img_input.getNativeObjAddr());
+            read_cascade_file(); //Cascade Load
+            checkFashion(cascadeClassifier_face,
+                    img_input.getNativeObjAddr(),
+                    img_output[0].getNativeObjAddr(),
+                    img_output[1].getNativeObjAddr(),
+                    img_output[2].getNativeObjAddr(),
+                    img_output[3].getNativeObjAddr(),
+                    img_output[4].getNativeObjAddr(),
+                    img_output[5].getNativeObjAddr());
+        }
+    }
+
+    private void initMat(){
+        img_input = new Mat();
+        for(int i=0; i<matNumber; i++){
+            img_output[i] = new Mat();
+        }
+    }
+
+    private void copyFile(String objFilename) {
         String baseDir = Environment.getExternalStorageDirectory().getPath();
-        String pathDir = baseDir + File.separator + filename;
+        String pathDir = baseDir + File.separator + objFilename;
 
         AssetManager assetManager = this.getAssets();
 
@@ -95,7 +218,7 @@ public class ResultActivity extends AppCompatActivity {
 
         try {
             Log.d( TAG, "copyFile :: 다음 경로로 파일복사 "+ pathDir);
-            inputStream = assetManager.open(filename);
+            inputStream = assetManager.open(objFilename);
             outputStream = new FileOutputStream(pathDir);
 
             byte[] buffer = new byte[1024];
@@ -119,42 +242,6 @@ public class ResultActivity extends AppCompatActivity {
         cascadeClassifier_face = loadCascade( "haarcascade_frontalface_alt.xml");
     }
 
-
-
-    private void imageprocess_and_showResult() {
-
-        checkFashion(cascadeClassifier_face, img_input.getNativeObjAddr(), img_output1.getNativeObjAddr(), img_output2.getNativeObjAddr());
-
-        cvtColor(img_input, img_input, COLOR_BGR2RGB);
-
-        Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(img_input, bitmapInput);
-        iv_ProfilePhoto.setImageBitmap(bitmapInput);
-
-        /*
-        Bitmap bitmapOutput1 = Bitmap.createBitmap(img_output1.cols(), img_output1.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(img_output1, bitmapOutput1);
-        iv_TOTPhoto.setImageBitmap(bitmapOutput1);
-
-        Bitmap bitmapOutput2 = Bitmap.createBitmap(img_output2.cols(), img_output2.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(img_output2, bitmapOutput2);
-        iv_TITPhoto.setImageBitmap(bitmapOutput2);
-        */
-    }
-
-    public void checkProcessing(String filePath){
-        img_input = new Mat();
-        img_output1 = new Mat();
-        img_output2 = new Mat();
-
-        if(filePath != null){
-            loadImage(filePath, img_input.getNativeObjAddr());
-            read_cascade_file(); //Cascade Load
-            imageprocess_and_showResult();
-        }
-
-    }
-
     /*
         Native CPP Implements..
      */
@@ -162,7 +249,12 @@ public class ResultActivity extends AppCompatActivity {
     public native void checkFashion(long cascadeClassifier_face,
                                     long matAddrInput,
                                     long matAddrResult1,
-                                    long matAddrResult2);
+                                    long matAddrResult2,
+                                    long matAddrResult3,
+                                    long matAddrResult4,
+                                    long matAddrResult5,
+                                    long matAddrResult6
+                                    );
 
     public native long loadCascade(String cascadeFileName );
     public native void loadImage(String imageFileName, long img);

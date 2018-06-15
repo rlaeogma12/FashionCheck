@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ColorHelpActivity" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".HistoryActivity" android:theme="@android:style/Theme.Dialog" />
 
         <!-- login main Activity -->
         <activity android:name=".LoginActivity" />

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -29,6 +30,17 @@
                 android:fontFamily="@font/billabong"
                 android:textSize="23sp" />
 
+            <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/bmb"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:visibility="invisible"
+                android:layout_alignParentRight="true"
+                app:bmb_buttonEnum="ham"
+                app:bmb_piecePlaceEnum="piecePlace_ham_3"
+                app:bmb_buttonPlaceEnum="buttonPlace_ham_3"
+                />
+
             <ImageButton
                 android:id="@+id/btn_option"
                 android:layout_width="40dp"
@@ -36,10 +48,10 @@
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:onClick="onClick"
                 android:scaleType="centerInside"
                 android:src="@drawable/menu"
                 android:textColor="@color/color_WHITE" />
+
 
         </RelativeLayout>
 
@@ -50,6 +62,7 @@
             android:layout_margin="10dp"
             android:layout_gravity="top"
             android:orientation="horizontal">
+
 
             <ImageButton
                 android:id="@+id/btn_UserInfoIcon"
@@ -154,6 +167,17 @@
                 android:background="@android:color/transparent"
                 android:scaleType="centerInside"
                 android:src="@drawable/camera" />
+
+            <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/bmb2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:visibility="invisible"
+                android:layout_centerInParent="true"
+                app:bmb_buttonEnum="ham"
+                app:bmb_piecePlaceEnum="piecePlace_ham_3"
+                app:bmb_buttonPlaceEnum="buttonPlace_ham_3"
+                />
 
             <ImageButton
                 android:id="@+id/btn_checkfashion"

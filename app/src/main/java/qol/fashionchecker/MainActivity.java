@@ -1,18 +1,12 @@
 package qol.fashionchecker;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,40 +15,35 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.roger.catloadinglibrary.CatLoadingView;
 import com.wooplr.spotlight.prefs.PreferencesManager;
 import com.wooplr.spotlight.utils.SpotlightSequence;
-
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.Mat;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 /////
 //Main Activity Settings.
@@ -85,16 +74,12 @@ public class MainActivity extends AppCompatActivity{
     Uri photoURI, albumURI;
     String resultPath;
 
-    //Progress Handler / Dialog
-    private Handler mHandler;
-    private ProgressDialog mProgressDialog;
+    //Progress Handler / Dialog (Loading progress)
+    CatLoadingView mView;
 
-    ImageButton btn_upload;
-    ImageButton btn_checkfashion;
-    ImageButton id_select;
-    ImageButton menu_select;
-    ImageButton list_select;
-
+    ImageButton btn_upload, btn_checkfashion, id_select;
+    ImageButton menu_select, list_select;
+    BoomMenuButton bmb, bmb2;
     //Create the App.
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -106,104 +91,69 @@ public class MainActivity extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
 
+        /* Button & ImageView Setting */
         iv_view = (ImageView) this.findViewById(R.id.user_image);
         user_id = this.findViewById(R.id.userid);
-
-
-
         btn_upload = this.findViewById(R.id.btn_UploadPicture);
         btn_checkfashion = this.findViewById(R.id.btn_checkfashion);
         id_select = this.findViewById(R.id.btn_UserInfoIcon);
         menu_select = this.findViewById(R.id.btn_option);
         list_select = this.findViewById(R.id.btn_ScoreList);
 
-        //ID Setting Alert Pop Up
-        id_select.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                showSetID();
-            }
-        });
+
+        //Get user spec
+        Intent intent = getIntent();
+        String usersid = intent.getStringExtra("userid");
+        String gender = intent.getStringExtra("gender");
+        user_id.setText(usersid);
+
+        //Boom button Trick
+        bmb = this.findViewById(R.id.bmb);
+        bmb2 = this.findViewById(R.id.bmb2);
 
         //Menu Bar
         menu_select.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                pulseAnimation();
-                //팝업 메뉴 객체 만듬
-                PopupMenu popup = new PopupMenu(getApplicationContext(), v);
-                //xml파일에 메뉴 정의한것을 가져오기위해서 전개자 선언
-                MenuInflater inflater = popup.getMenuInflater();
-                Menu menu = popup.getMenu();
-                //실제 메뉴 정의한것을 가져오는 부분 menu 객체에 넣어줌
-                inflater.inflate(R.menu.popupmenu, menu);
-                //메뉴가 클릭했을때 처리하는 부분
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        // TODO Auto-generated method stub
-                        //각 메뉴별 아이디를 조사한후 할일을 적어줌
-                        switch(item.getItemId()){
-                            case R.id.popup_info:
-                                showInfoMenu();
-                                break;
-
-                            case R.id.popup_help:
-                                helpHighlight();
-                                break;
-
-                            case R.id.popup_exit:
-                                showExitMenu();
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popup.show();
+                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.pulse);
+                menu_select.startAnimation(hyperspaceJumpAnimation);
+                bmb.boom();
             }
         });
 
         list_select.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                pulseAnimation();
+                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.pulse);
+                list_select.startAnimation(hyperspaceJumpAnimation);
+                openHistory();
             }
         });
 
         btn_checkfashion.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.pulse);
+                btn_checkfashion.startAnimation(hyperspaceJumpAnimation);
+
                 if(resultPath != null){
-                    Intent intent = new Intent(
-                            getApplicationContext(), // 현재 화면의 제어권자
-                            ResultActivity.class); // 다음 넘어갈 클래스 지정
+                    mView = new CatLoadingView();
+                    mView.setCanceledOnTouchOutside(false);
+                    mView.show(getSupportFragmentManager(), "");
 
-                    intent.setAction("android.intent.action.RESULT");
-                    intent.putExtra("imgPath", resultPath);
-
-                    mHandler = new Handler();
-                    mProgressDialog = ProgressDialog.show(MainActivity.this,"",
-                            "사진을 분석중입니다..",true);
-                    mHandler.postDelayed( new Runnable()
-                    {
+                    Handler hd = new Handler();
+                    hd.postDelayed(new Runnable() {
                         @Override
-                        public void run()
-                        {
-                            try
-                            {
-                                if (mProgressDialog!=null&&mProgressDialog.isShowing()){
-                                    mProgressDialog.dismiss();
-                                }
-                            }
-                            catch ( Exception e )
-                            {
-                                e.printStackTrace();
-                            }
+                        public void run() {
+                            Intent intent = new Intent(
+                                    getApplicationContext(), // 현재 화면의 제어권자
+                                    ResultActivity.class); // 다음 넘어갈 클래스 지정
+                            intent.setAction("android.intent.action.RESULT");
+                            intent.putExtra("imgPath", resultPath);
+                            startActivity(intent);
+                            mView.onDismiss(mView.getDialog());
                         }
-                    }, 3000);
-
-                    startActivity(intent); // 다음 화면으로 넘어간다
+                    }, 2000);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "사진을 설정하시지 않으셨는데요!" ,Toast.LENGTH_LONG).show();
@@ -212,59 +162,153 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
         btn_upload.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        captureCamera();
-                    }
-                };
-
-                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getAlbum();
-                    }
-                };
-
-
-                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                };
-
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("업로드할 이미지 선택")
-                        .setPositiveButton("사진촬영", cameraListener)
-                        .setNeutralButton("앨범선택", albumListener)
-                        .setNegativeButton("취소", cancelListener)
-                        .show();
+                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.pulse);
+                btn_upload.startAnimation(hyperspaceJumpAnimation);
+                bmb2.boom();
             }
         });
 
+        initSettingsBoom();
         checkPermission();
-
         helpHighlight();
     }
 
-    //Button Animation
-    ObjectAnimator objAnim;
-    private void pulseAnimation(){
-        objAnim= ObjectAnimator.ofPropertyValuesHolder(list_select,
-                PropertyValuesHolder.ofFloat("scaleX", 1.5f),
-                PropertyValuesHolder.ofFloat("scaleY", 1.5f));
-        objAnim.setDuration(300);
-        objAnim.setRepeatCount(ObjectAnimator.RESTART);
-        objAnim.setRepeatMode(ObjectAnimator.REVERSE);
-        objAnim.start();
+    private void openHistory(){
+        Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
+        intent.putExtra("data", "Test Popup");
+        startActivityForResult(intent, 1);
     }
 
-    void helpHighlight(){
+    private void initSettingsBoom(){
+        initSettingsBoom1();
+        initSettingsBoom2();
+    }
+
+    private void initSettingsBoom1() {
+        int[] settingsBtns = {R.drawable.information, R.drawable.conversation, R.drawable.power_button};
+        String[] settingsStrs = { "Info & Credits" , "Help", "Exit"};
+        String[] settingSubStrs = { "프로그램 정보", "도움말", "프로그램 종료"};
+
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
+            HamButton.Builder builder = new HamButton.Builder()
+                    .normalImageRes(settingsBtns[i])
+                    .normalText(settingsStrs[i])
+                    .subNormalText(settingSubStrs[i])
+                    .listener(new OnBMClickListener() {
+                        @Override
+                        public void onBoomButtonClick(int index) {
+                            // When the boom-button corresponding this builder is clicked.
+                            showMenuDialog(index);
+                        }
+                    });
+            bmb.addBuilder(builder);
+        }
+    }
+
+    private void showMenuDialog(int id){
+        switch(id){
+            case 0:
+                showInfoDialog();
+                break;
+            case 1:
+                showHelpDialog();
+                break;
+            case 2:
+                showExitDialog();
+                break;
+        }
+    }
+
+    private void showInfoDialog(){
+        new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                .setTopColorRes(R.color.color_MAIN)
+                .setButtonsColorRes(R.color.colorPrimary)
+                .setIcon(R.drawable.information)
+                .setTitle("Info & Credits")
+                .setMessage("김대흠 이성제 천예지")
+                .setPositiveButton(android.R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                })
+                .show();
+    }
+
+    private void showHelpDialog(){
+        new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                .setTopColorRes(R.color.color_MAIN)
+                .setButtonsColorRes(R.color.colorPrimary)
+                .setIcon(R.drawable.conversation)
+                .setTitle("Help")
+                .setMessage("도움말을 다시 확인하시겠습니까?")
+                .setPositiveButton(android.R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        helpHighlight();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
+    private void showExitDialog(){
+        new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                .setTopColorRes(R.color.color_MAIN)
+                .setButtonsColorRes(R.color.colorPrimary)
+                .setIcon(R.drawable.power_button)
+                .setTitle("Exit Program")
+                .setMessage("정말로 프로그램을 종료하시겠습니까?")
+                .setPositiveButton(android.R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Exit Program.
+                        moveTaskToBack(true);
+                        finish();
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
+    private void initSettingsBoom2() {
+        int[] settingsBtns = {R.drawable.photo_camera, R.drawable.photo_album, R.drawable.close};
+        String[] settingsStrs = { "Taking Photo" , "Select Album", "Close"};
+        String[] settingSubStrs = { "카메라로 사진 촬영", "앨범에서 사진 선택", "닫기"};
+
+        for (int i = 0; i < bmb2.getPiecePlaceEnum().pieceNumber(); i++) {
+            HamButton.Builder builder = new HamButton.Builder()
+                    .normalImageRes(settingsBtns[i])
+                    .normalText(settingsStrs[i])
+                    .subNormalText(settingSubStrs[i])
+                    .listener(new OnBMClickListener() {
+                        @Override
+                        public void onBoomButtonClick(int index) {
+                            // When the boom-button corresponding this builder is clicked.
+                            showUploadDialog(index);
+                        }
+                    });
+            bmb2.addBuilder(builder);
+        }
+    }
+
+    private void showUploadDialog(int id){
+        switch(id){
+            case 0:
+                captureCamera();
+                break;
+            case 1:
+                getAlbum();
+                break;
+            case 2:
+                break;
+        }
+    }
+
+    private void helpHighlight(){
         PreferencesManager mPreferencesManager = new PreferencesManager(MainActivity.this);
         mPreferencesManager.resetAll();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -274,85 +318,13 @@ public class MainActivity extends AppCompatActivity{
                         .addSpotlight(id_select, "User Name", "이곳에 당신의 아이디가 나타납니다.", INTRO_SWITCH)
                         .addSpotlight(menu_select, "Menu", "이곳을 클릭하여 메뉴를 확인하세요.", INTRO_RESET)
                         .addSpotlight(iv_view, "Profile Image", "이곳에는 프로필 이미지가 나타납니다.", INTRO_REPEAT)
-                        .addSpotlight(list_select, "List", "이곳에는 현재까지의 패션 점수 목록이 나타납니다.", INTRO_CHANGE_POSITION)
+                        .addSpotlight(list_select, "List", "이곳에는 현재까지의 \n" + "패션 점수 목록이 나타납니다.", INTRO_CHANGE_POSITION)
                         .addSpotlight(btn_upload, "Image Upload", "이곳을 눌러 이미지를 업로드하세요.", INTRO_SEQUENCE)
                         .addSpotlight(btn_checkfashion,"Check", "프로필 사진을 올렸나요?\n" + "분석을 시작합시다!", INTRO_CARD)
                         .startSequence();
             }
         },400);
     }
-
-    void showSetID()    {
-        final EditText edittext = new EditText(this);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("프로필 정보 설정");
-        builder.setMessage("당신의 이름을 입력해 주세요.");
-        builder.setView(edittext);
-        builder.setPositiveButton("입력",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        user_id.setText(edittext.getText().toString());
-                        Toast.makeText(getApplicationContext(), "유저 이름을 변경했습니다." ,Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.setNegativeButton("취소",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "변경을 취소했습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        builder.show();
-    }
-
-    void showExitMenu(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("패션 감지기");
-        builder.setMessage("정말로 어플리케이션을 종료하겠습니까?");
-        builder.setPositiveButton("네",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Exit Program.
-                        moveTaskToBack(true);
-                        finish();
-                        android.os.Process.killProcess(android.os.Process.myPid());
-                    }
-                });
-        builder.setNegativeButton("아니오",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Nothing.
-                    }
-                });
-        builder.show();
-    }
-
-    void showHelpMenu(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("도움말");
-        builder.setMessage("카메라 버튼을 통해 사진을 찍고, 우하단 체크 아이콘을 눌러 자신의 패션 감각을 확인하면 됩니다.");
-        builder.setNeutralButton("확인",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //
-                    }
-                });
-        builder.show();
-    }
-
-    void showInfoMenu(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Credit");
-        builder.setMessage("김대흠 이성제 천예지");
-        builder.setNeutralButton("확인",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //
-                    }
-                });
-        builder.show();
-    }
-
 
     private void captureCamera(){
         String state = Environment.getExternalStorageState();

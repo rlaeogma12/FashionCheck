@@ -1,20 +1,19 @@
 package qol.fashionchecker;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-public class ColorHelpActivity extends Activity {
+public class HistoryActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.popup_colorhelp);
+        setContentView(R.layout.history_popup);
 
         //UI 객체생성
         Button btn_OK = this.findViewById(R.id.btn_ok);
@@ -25,9 +24,11 @@ public class ColorHelpActivity extends Activity {
             }
         });
 
+        /*
         //데이터 가져오기
         Intent intent = getIntent();
         String data = intent.getStringExtra("data");
+        */
     }
 
     @Override
