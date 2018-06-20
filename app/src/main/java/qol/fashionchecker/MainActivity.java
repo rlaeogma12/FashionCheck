@@ -41,6 +41,7 @@ import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.roger.catloadinglibrary.CatLoadingView;
+import com.skyfishjy.library.RippleBackground;
 import com.wooplr.spotlight.prefs.PreferencesManager;
 import com.wooplr.spotlight.utils.SpotlightSequence;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -77,9 +78,17 @@ public class MainActivity extends AppCompatActivity{
     //Progress Handler / Dialog (Loading progress)
     CatLoadingView mView;
 
+    //Button List
     ImageButton btn_upload, btn_checkfashion, id_select;
     ImageButton menu_select, list_select;
     BoomMenuButton bmb, bmb2;
+
+    //User Info
+    String usersid, gender;
+
+    //Ripple Ground set
+    RippleBackground rippleBackground1;
+
     //Create the App.
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -100,11 +109,14 @@ public class MainActivity extends AppCompatActivity{
         menu_select = this.findViewById(R.id.btn_option);
         list_select = this.findViewById(R.id.btn_ScoreList);
 
+        //Start Focusing upload Btn.
+        rippleBackground1 = findViewById(R.id.ripple_uploadBtn);
+        rippleBackground1.startRippleAnimation();
 
         //Get user spec
         Intent intent = getIntent();
-        String usersid = intent.getStringExtra("userid");
-        String gender = intent.getStringExtra("gender");
+        usersid = intent.getStringExtra("userid");
+        gender = intent.getStringExtra("gender");
         user_id.setText(usersid);
 
         //Boom button Trick
@@ -150,8 +162,11 @@ public class MainActivity extends AppCompatActivity{
                                     ResultActivity.class); // 다음 넘어갈 클래스 지정
                             intent.setAction("android.intent.action.RESULT");
                             intent.putExtra("imgPath", resultPath);
+                            intent.putExtra("usersid", usersid);
+                            intent.putExtra("gender",gender);
                             startActivity(intent);
                             mView.onDismiss(mView.getDialog());
+                            rippleBackground1.stopRippleAnimation();
                         }
                     }, 2000);
                 }
@@ -173,7 +188,7 @@ public class MainActivity extends AppCompatActivity{
 
         initSettingsBoom();
         checkPermission();
-        helpHighlight();
+        //helpHighlight();
     }
 
     private void openHistory(){
@@ -188,9 +203,9 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initSettingsBoom1() {
-        int[] settingsBtns = {R.drawable.information, R.drawable.conversation, R.drawable.power_button};
-        String[] settingsStrs = { "Info & Credits" , "Help", "Exit"};
-        String[] settingSubStrs = { "프로그램 정보", "도움말", "프로그램 종료"};
+        int[] settingsBtns = {R.drawable.information, R.drawable.conversation, R.drawable.close, R.drawable.power_button};
+        String[] settingsStrs = { "Info & Credits" , "Help", "Back to title", "Exit"};
+        String[] settingSubStrs = { "프로그램 정보", "도움말", "타이틀로 돌아가기", "프로그램 종료"};
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             HamButton.Builder builder = new HamButton.Builder()
@@ -217,12 +232,16 @@ public class MainActivity extends AppCompatActivity{
                 showHelpDialog();
                 break;
             case 2:
+                showBackTitleDialog();
+                break;
+            case 3:
                 showExitDialog();
                 break;
         }
     }
 
     private void showInfoDialog(){
+
         new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
                 .setTopColorRes(R.color.color_MAIN)
                 .setButtonsColorRes(R.color.colorPrimary)
@@ -235,9 +254,11 @@ public class MainActivity extends AppCompatActivity{
                     }
                 })
                 .show();
+
     }
 
     private void showHelpDialog(){
+
         new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
                 .setTopColorRes(R.color.color_MAIN)
                 .setButtonsColorRes(R.color.colorPrimary)
@@ -252,9 +273,34 @@ public class MainActivity extends AppCompatActivity{
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .show();
+
+    }
+
+    private void showBackTitleDialog(){
+
+        new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                .setTopColorRes(R.color.color_MAIN)
+                .setButtonsColorRes(R.color.colorPrimary)
+                .setIcon(R.drawable.close)
+                .setTitle("Back to title")
+                .setMessage("타이틀 화면으로 돌아가시겠습니?")
+                .setPositiveButton(android.R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Back to title.
+                        Intent intent = new Intent(
+                                getApplicationContext(), // 현재 화면의 제어권자
+                                WelcomeActivity.class); // 다음 넘어갈 클래스 지정
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+
     }
 
     private void showExitDialog(){
+
         new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
                 .setTopColorRes(R.color.color_MAIN)
                 .setButtonsColorRes(R.color.colorPrimary)
@@ -272,6 +318,7 @@ public class MainActivity extends AppCompatActivity{
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .show();
+
     }
 
     private void initSettingsBoom2() {
@@ -423,6 +470,7 @@ public class MainActivity extends AppCompatActivity{
                         galleryAddPic();
                         iv_view.setImageURI(imageUri);
                         resultPath = mCurrentPhotoPath;
+
                     } catch (Exception e) {
                         Log.e("REQUEST_TAKE_PHOTO", e.toString());
                     }

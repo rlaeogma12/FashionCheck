@@ -8,6 +8,8 @@
 using namespace cv;
 using namespace std;
 
+
+
 ////
 //Default Functions for Detecting Human
 ////
@@ -303,7 +305,7 @@ void HSVtoRGB(double h, double s, double v, int &red, int &green, int &blue){
 
 Mat ToneOnTone(vector<value> &arr) {
 
-    Mat Up(300, 300, CV_8UC3, Scalar(245, 245, 245));
+    Mat Up(100, 600, CV_8UC3, Scalar(255, 255, 255));
 
     double b, g, r, h, s, v;
     b = 0; g = 0; r = 0, h = 0, s = 0, v = 0;
@@ -356,16 +358,16 @@ Mat ToneOnTone(vector<value> &arr) {
 
                 HSVtoRGB(h, s1, v1, red, green, blue);
 
-                circle(Up, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
 
             for (float v1 = v; v1 > 0.08; v1 -= 0.08) {
 
                 HSVtoRGB(h, s1, v1, red, green, blue);
 
-                circle(Up, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -376,8 +378,8 @@ Mat ToneOnTone(vector<value> &arr) {
 
                 HSVtoRGB(h, s1, v1, red, green, blue);
 
-                circle(Up, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -387,8 +389,8 @@ Mat ToneOnTone(vector<value> &arr) {
 
                 HSVtoRGB(h, s1, v1, red, green, blue);
 
-                circle(Up, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
 
 
@@ -396,8 +398,8 @@ Mat ToneOnTone(vector<value> &arr) {
 
                 HSVtoRGB(h, s1, v1, red, green, blue);
 
-                circle(Up, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -411,7 +413,7 @@ Mat ToneOnTone(vector<value> &arr) {
 
 Mat ToneInTone(vector<value> &arr) {
 
-    Mat Up2(300, 300, CV_8UC3, Scalar(255, 245, 245));
+    Mat Up2(100, 600, CV_8UC3, Scalar(255, 255, 255));
 
     double b, g, r, h, s, v;
     b = 0; g = 0; r = 0, h = 0, s = 0, v = 0;
@@ -468,8 +470,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -479,8 +481,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -491,8 +493,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -503,8 +505,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -515,8 +517,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -527,8 +529,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -539,8 +541,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -551,8 +553,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -563,8 +565,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -575,8 +577,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -587,8 +589,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -597,8 +599,8 @@ Mat ToneInTone(vector<value> &arr) {
 
                 HSVtoRGB(h1, s1, v1, red, green, blue);
 
-                circle(Up2, Point(10 + l, 10 + k), 20, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
-                l += 20;
+                circle(Up2, Point(40 + l, 40 + k), 40, Scalar(Convert3(blue), Convert3(green), Convert3(red)), -1);
+                l += 50;
             }
         }
 
@@ -675,7 +677,8 @@ Java_qol_fashionchecker_ResultActivity_checkFashion(JNIEnv *env, jobject type,
                                                     jlong matAddrResult3,
                                                     jlong matAddrResult4,
                                                     jlong matAddrResult5,
-                                                    jlong matAddrResult6) {
+                                                    jlong matAddrResult6,
+                                                    jobject scoreObj) {
 
     Mat &img_input = *(Mat *) matAddrInput;
     Mat &img_result1 = *(Mat *) matAddrResult1;
@@ -700,6 +703,9 @@ Java_qol_fashionchecker_ResultActivity_checkFashion(JNIEnv *env, jobject type,
     //-- Detect faces
     vector<Rect> face;
     ((CascadeClassifier *) cascadeClassifier_face)->detectMultiScale(gray, face, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
+    if(face.size() == 0){
+        return; //얼굴 감지 안될 경우 리턴하여 에러를 방지한다.
+    }
     Rect Face = face[0];
     rectangle(image, Face.tl(), Face.br(), Scalar(0, 0, 255), 2);
 
@@ -820,11 +826,12 @@ Java_qol_fashionchecker_ResultActivity_checkFashion(JNIEnv *env, jobject type,
         i++;
     }
 
-    Mat Up_TOT(300, 100, CV_8UC3, Scalar(255, 255, 255));
-    Mat Up_TIT(300, 100, CV_8UC3, Scalar(255, 255, 255));
+    Mat Up_TOT(100, 600, CV_8UC3, Scalar(255, 255, 255));
+    Mat Up_TIT(100, 600, CV_8UC3, Scalar(255, 255, 255));
 
     Up_TOT = ToneOnTone(Max_Up_colorArray);
     Up_TIT = ToneInTone(Max_Up_colorArray);
+
 
 
     totalcnt = 0, l = 0;
@@ -878,8 +885,8 @@ Java_qol_fashionchecker_ResultActivity_checkFashion(JNIEnv *env, jobject type,
         i++;
     }
 
-    Mat Lo_TOT(300, 100, CV_8UC3, Scalar(255, 255, 255));
-    Mat Lo_TIT(300, 100, CV_8UC3, Scalar(255, 255, 255));
+    Mat Lo_TOT(100, 600, CV_8UC3, Scalar(255, 255, 255));
+    Mat Lo_TIT(100, 600, CV_8UC3, Scalar(255, 255, 255));
 
     Lo_TOT = ToneOnTone(Max_Lo_colorArray);
     Lo_TIT = ToneInTone(Max_Lo_colorArray);
@@ -893,6 +900,16 @@ Java_qol_fashionchecker_ResultActivity_checkFashion(JNIEnv *env, jobject type,
     img_result4 = Lo_TIT;
     img_result5 = Up_TOT;
     img_result6 = Lo_TIT;
+
+    //Setting Scores.
+    jfieldID fid;
+    jclass cls = env->GetObjectClass(scoreObj);
+    fid = env->GetFieldID(cls,"score_color","I");
+    env->SetIntField(scoreObj,fid, 30);
+    fid = env->GetFieldID(cls,"score_nanzab","I");
+    env->SetIntField(scoreObj,fid, 70);
+    fid = env->GetFieldID(cls,"TPOtype","I");
+    env->SetIntField(scoreObj,fid, 1);
 }
 
 }

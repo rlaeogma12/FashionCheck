@@ -27,6 +27,7 @@ public class WelcomeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.start_main);
 
         final RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);

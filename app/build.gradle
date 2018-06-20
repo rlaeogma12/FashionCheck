@@ -48,6 +48,6 @@ dependencies {
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
     implementation 'com.github.wooplr:Spotlight:1.2.3'
     implementation 'com.nightonke:boommenu:2.1.1'
-    implementation 'com.yarolegovich:lovely-dialog:1.1.0'
     implementation 'com.roger.catloadinglibrary:catloadinglibrary:1.0.4'
+    implementation 'com.yarolegovich:lovely-dialog:1.1.0'
 }

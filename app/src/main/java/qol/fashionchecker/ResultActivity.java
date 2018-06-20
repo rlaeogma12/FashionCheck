@@ -15,6 +15,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roger.catloadinglibrary.CatLoadingView;
@@ -47,6 +49,7 @@ public class ResultActivity extends AppCompatActivity {
 
     //Btn List
     ImageButton btn_return, btn_share;
+    ProgressBar prg_color, prg_nanzab;
 
     //target image file path
     String filePath;
@@ -54,6 +57,19 @@ public class ResultActivity extends AppCompatActivity {
     //Use Thread-Handler for handling huge data process.
     private Handler handler;
     CatLoadingView mView;
+
+    //Score Point
+    class ScoreList{
+        int score_color;
+        int score_nanzab;
+        int TPOtype;
+    }
+    ScoreList scoreObj;
+
+    private TextView txt_score, txt_tpo;
+
+    //User Setting
+    String user_gender, user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,20 +80,31 @@ public class ResultActivity extends AppCompatActivity {
         matNumber = 6;
         img_output = new Mat[matNumber];
 
+        scoreObj = new ScoreList();
+        scoreObj.score_color = -1;  //Default Value(-1 , non-setting)
+        scoreObj.score_nanzab = -1;
+
         // Connect View to value.
         iv_ProfilePhoto = this.findViewById(R.id.Profile_Image);
         iv_preferCloth = this.findViewById(R.id.prefer_shirt);
         iv_preferPants = this.findViewById(R.id.prefer_pants);
         iv_preferBriefcase = this.findViewById(R.id.prefer_briefcase);
         iv_preferAccessary = this.findViewById(R.id.prefer_clean);
+        prg_color = this.findViewById(R.id.progress1);
+        prg_nanzab = this.findViewById(R.id.progress2);
+        txt_score = this.findViewById(R.id.txt_score);
+        txt_tpo = this.findViewById(R.id.txt_tpo);
 
         //Handler allocation.
         handler = new Handler();
+
 
         //Intent 받아오기
         Intent intent = getIntent();
         if(intent.getAction().equals("android.intent.action.RESULT")){
             filePath = intent.getStringExtra("imgPath");
+            user_gender = intent.getStringExtra("gender");
+            user_id = intent.getStringExtra("usersid");
             Log.d("File : ", filePath);
             File imgFile = new File(filePath);
             if(imgFile.exists()){
@@ -88,7 +115,8 @@ public class ResultActivity extends AppCompatActivity {
                 mView.setCanceledOnTouchOutside(false);
                 mView.show(getSupportFragmentManager(), "");
 
-                Thread thread = new Thread(null, getMatData); //스레드 생성후 스레드에서 작업할 함수 지정(get)
+                //Works on Thread (Func getMatData)
+                Thread thread = new Thread(null, getMatData);
                 thread.start();
             }
             else{
@@ -156,31 +184,51 @@ public class ResultActivity extends AppCompatActivity {
       }
     };
 
+    //Access UI
     private void setMatImageToView(){
-        //Change BRR -> RGB (C++ : BGR , Java : RGB)
-        cvtColor(img_input, img_input, COLOR_BGR2RGB);
-        for(int i=0; i<matNumber; i++){
-            cvtColor(img_output[i], img_output[i], COLOR_BGR2RGB);
+        if(scoreObj.score_color != -1){
+            //Change BRR -> RGB (C++ : BGR , Java : RGB)
+            cvtColor(img_input, img_input, COLOR_BGR2RGB);
+            for(int i=0; i<matNumber; i++){
+                cvtColor(img_output[i], img_output[i], COLOR_BGR2RGB);
+            }
+
+            Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(img_input, bitmapInput);
+            iv_ProfilePhoto.setImageBitmap(bitmapInput);
+
+            Bitmap[] bitmapOutput = new Bitmap[matNumber];
+
+            for(int i=0; i<matNumber; i++){
+                bitmapOutput[i] = Bitmap.createBitmap(img_output[i].cols(), img_output[i].rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(img_output[i], bitmapOutput[i]);
+            }
+
+            iv_preferCloth.setImageBitmap(bitmapOutput[0]);
+            iv_preferPants.setImageBitmap(bitmapOutput[1]);
+            iv_preferBriefcase.setImageBitmap(bitmapOutput[2]);
+            iv_preferAccessary.setImageBitmap(bitmapOutput[3]);
+            //2 more settings.
+            //Score Setting
+            prg_color.setProgress(scoreObj.score_color);
+            prg_nanzab.setProgress(scoreObj.score_nanzab);
+            int totalScore = (scoreObj.score_color + scoreObj.score_nanzab) / 2;
+            String scoreResult = "당신의 패션점수는\n" + totalScore + "/100 점 입니다";
+            txt_score.setText(scoreResult);
+            txt_tpo.setText(getTPO());  //TPO Set.
+
         }
-
-        Bitmap bitmapInput = Bitmap.createBitmap(img_input.cols(), img_input.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(img_input, bitmapInput);
-        iv_ProfilePhoto.setImageBitmap(bitmapInput);
-
-        Bitmap[] bitmapOutput = new Bitmap[matNumber];
-
-        for(int i=0; i<matNumber; i++){
-            bitmapOutput[i] = Bitmap.createBitmap(img_output[i].cols(), img_output[i].rows(), Bitmap.Config.ARGB_8888);
-            Utils.matToBitmap(img_output[i], bitmapOutput[i]);
+        else{
+            Toast.makeText(this, "얼굴 인식에 실패했습니다. 올바른 사진을 넣어주세요.", Toast.LENGTH_SHORT).show();
         }
-
-        iv_preferCloth.setImageBitmap(bitmapOutput[0]);
-        iv_preferPants.setImageBitmap(bitmapOutput[1]);
-        iv_preferBriefcase.setImageBitmap(bitmapOutput[2]);
-        iv_preferAccessary.setImageBitmap(bitmapOutput[3]);
-        /*
-        2 more available.
-         */
+    }
+    private String getTPO(){
+        switch(scoreObj.TPOtype){
+            case 1: return "캠퍼스룩";
+            case 2: return "사회생활룩";
+            case 3: return "나들이룩";
+            default : return "Error..";
+        }
     }
 
     private void getMatDataFromNativeCpp(){
@@ -196,7 +244,8 @@ public class ResultActivity extends AppCompatActivity {
                     img_output[2].getNativeObjAddr(),
                     img_output[3].getNativeObjAddr(),
                     img_output[4].getNativeObjAddr(),
-                    img_output[5].getNativeObjAddr());
+                    img_output[5].getNativeObjAddr(),
+                    scoreObj);
         }
     }
 
@@ -253,7 +302,8 @@ public class ResultActivity extends AppCompatActivity {
                                     long matAddrResult3,
                                     long matAddrResult4,
                                     long matAddrResult5,
-                                    long matAddrResult6
+                                    long matAddrResult6,
+                                    ScoreList scoreObj
                                     );
 
     public native long loadCascade(String cascadeFileName );

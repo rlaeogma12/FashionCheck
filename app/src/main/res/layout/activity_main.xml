@@ -37,8 +37,8 @@
                 android:visibility="invisible"
                 android:layout_alignParentRight="true"
                 app:bmb_buttonEnum="ham"
-                app:bmb_piecePlaceEnum="piecePlace_ham_3"
-                app:bmb_buttonPlaceEnum="buttonPlace_ham_3"
+                app:bmb_piecePlaceEnum="piecePlace_ham_4"
+                app:bmb_buttonPlaceEnum="buttonPlace_ham_4"
                 />
 
             <ImageButton
@@ -158,15 +158,30 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/notes" />
 
-            <ImageButton
-                android:id="@+id/btn_UploadPicture"
-                android:layout_width="30dp"
+            <com.skyfishjy.library.RippleBackground
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/camera" />
+                android:id="@+id/ripple_uploadBtn"
+                app:rb_color="#0099cc"
+                app:rb_radius="30dp"
+                app:rb_rippleAmount="1"
+                app:rb_duration="2000"
+                app:rb_type="strokeRipple"
+                app:rb_scale="2">
+                <ImageButton
+                    android:id="@+id/btn_UploadPicture"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/camera" />
+            </com.skyfishjy.library.RippleBackground>
+
+
 
             <com.nightonke.boommenu.BoomMenuButton
                 android:id="@+id/bmb2"
